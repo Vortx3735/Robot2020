@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 
 public class NormalDrive extends CommandBase {
   /**
@@ -25,6 +26,17 @@ public class NormalDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double move = RobotContainer.getDriveValue();
+    double turn = RobotContainer.getTurnValue();
+
+    // Robot.drive.r1.setOpenLoopRampRate(RobotMap.Constants.rampRate);
+    // Robot.drive.l1.setOpenLoopRampRate(RobotMap.Constants.rampRate);
+    // if (move == 0) {
+    //   Robot.drive.r1.setOpenLoopRampRate(0);
+    //   Robot.drive.l1.setOpenLoopRampRate(0);
+    // }
+
+    RobotContainer.drive.setLeftRight(move + turn, move - turn);
   }
 
   // Called once the command ends or is interrupted.
