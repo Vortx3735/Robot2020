@@ -18,10 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class colorSensor extends SubsystemBase {
-  /**
-   * Creates a new colorSensor.
-   */
+public class ColorSensor extends SubsystemBase {
+
   ColorSensorV3 sensor;
   I2C.Port i2cport = I2C.Port.kOnboard;
   ColorMatch match;
@@ -33,7 +31,7 @@ public class colorSensor extends SubsystemBase {
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
   
-  public colorSensor() {
+  public ColorSensor() {
     sensor = new ColorSensorV3(i2cport);
     match = new ColorMatch();
 

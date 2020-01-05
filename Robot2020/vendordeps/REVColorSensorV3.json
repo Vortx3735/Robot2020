@@ -1,14 +1,4 @@
 {
-<<<<<<< HEAD
-    "cppDependencies": [
-        {
-            "artifactId": "ColorSensorV3-cpp",
-=======
-<<<<<<< HEAD
-    "cppDependencies": [
-        {
-            "artifactId": "ColorSensorV3-cpp",
-=======
     "fileName": "REVColorSensorV3.json",
     "name": "REVColorSensorV3",
     "version": "1.0.0",
@@ -35,50 +25,13 @@
             "sourcesClassifier": "source",
             "sharedLibrary": false,
             "skipInvalidPlatforms": true,
->>>>>>> master
->>>>>>> master
             "binaryPlatforms": [
                 "windowsx86-64",
                 "windowsx86",
                 "linuxx86-64",
                 "linuxathena",
                 "linuxraspbian"
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> master
-            ],
-            "groupId": "com.revrobotics.frc",
-            "headerClassifier": "headers",
-            "libName": "ColorSensorV3",
-            "sharedLibrary": false,
-            "skipInvalidPlatforms": true,
-            "sourcesClassifier": "source",
-            "version": "1.0.0"
-        }
-    ],
-    "fileName": "REVColorSensorV3.json",
-    "javaDependencies": [
-        {
-            "artifactId": "ColorSensorV3-java",
-            "groupId": "com.revrobotics.frc",
-            "version": "1.0.0"
-        }
-    ],
-    "jniDependencies": [],
-    "jsonUrl": "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/REVColorSensorV3.json",
-    "mavenUrls": [
-        "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/"
-    ],
-    "name": "REVColorSensorV3",
-    "uuid": "cda7b4b1-d003-44ac-a1ef-485c1347059a",
-    "version": "1.0.0"
-<<<<<<< HEAD
-=======
-=======
             ]
         }
     ]
->>>>>>> master
->>>>>>> master
 }

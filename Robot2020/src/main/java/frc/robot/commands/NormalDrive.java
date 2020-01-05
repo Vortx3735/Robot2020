@@ -9,13 +9,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.DriveTrain;
 
 public class NormalDrive extends CommandBase {
   /**
    * Creates a new NormalDrive.
    */
-  public NormalDrive() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private final DriveTrain drive;
+  public NormalDrive(DriveTrain driveTrain) {
+    drive = driveTrain;
+    addRequirements(driveTrain);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -36,12 +40,14 @@ public class NormalDrive extends CommandBase {
     //   Robot.drive.l1.setOpenLoopRampRate(0);
     // }
 
-    RobotContainer.drive.setLeftRight(move + turn, move - turn);
+    drive.setLeftRight(move + turn, move - turn);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if(!interrupted)
+      drive.setLeftRight(0, 0);
   }
 
   // Returns true when the command should end.

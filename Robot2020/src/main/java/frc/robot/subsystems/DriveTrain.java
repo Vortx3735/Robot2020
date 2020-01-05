@@ -31,7 +31,6 @@ public class DriveTrain extends SubsystemBase {
     r2.follow(r1);
     r1.setInverted(true);
 
-    setDefaultCommand(new NormalDrive());
   }
 
   public void setLeftRight(double left, double right) {

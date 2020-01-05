@@ -11,33 +11,34 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-
-import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.colorSensorCommand;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.NormalDrive;
+import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.util.VorTXController;
 import frc.robot.util.VorTXMath;
 
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
 
-  public static DriveTrain drive;
+  //Subsystems
+  private final DriveTrain drive = new DriveTrain();
+  private final ColorSensor color = new ColorSensor();
 
 
-  
-  public static colorSensor colorSens;
-  public static VorTXController main;
-  public static VorTXController co;
+  //Commands
+  private final NormalDrive normalDrive = new NormalDrive(drive);
+
+
+  //Controllers
+  private static final VorTXController main = new VorTXController(0);
+  private static final VorTXController co = new VorTXController(1);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    drive = new DriveTrain();
-    colorSens = new colorSensor();
-    main = new VorTXController(0);
-    co = new VorTXController(1);
+    drive.setDefaultCommand(normalDrive);
     configureButtonBindings();
   }
 
