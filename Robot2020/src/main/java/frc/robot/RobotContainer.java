@@ -11,9 +11,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-import frc.robot.subsystems.VexMotorTemplate;
 
+import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.colorSensorCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.util.VorTXController;
 import frc.robot.util.VorTXMath;
@@ -23,9 +24,9 @@ public class RobotContainer {
 
   public static DriveTrain drive;
 
-  public static VexMotorTemplate motorTemp;
 
-
+  
+  public static colorSensor colorSens;
   public static VorTXController main;
   public static VorTXController co;
 
@@ -34,9 +35,9 @@ public class RobotContainer {
    */
   public RobotContainer() {
     drive = new DriveTrain();
+    colorSens = new colorSensor();
     main = new VorTXController(0);
     co = new VorTXController(1);
-    motorTemp = new VexMotorTemplate();
     configureButtonBindings();
   }
 

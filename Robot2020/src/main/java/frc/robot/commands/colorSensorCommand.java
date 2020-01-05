@@ -9,15 +9,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.VexMotorTemplate;
 
-public class motorCommand extends CommandBase {
+public class colorSensorCommand extends CommandBase {
   /**
-   * Creates a new motorCommand.
+   * Creates a new colorSensorCommand.
    */
-  public motorCommand() {
+  public colorSensorCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements();
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +26,8 @@ public class motorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.motorTemp.movement(0.5);
+    RobotContainer.colorSens.detectColor();
+    RobotContainer.colorSens.periodic();
   }
 
   // Called once the command ends or is interrupted.
