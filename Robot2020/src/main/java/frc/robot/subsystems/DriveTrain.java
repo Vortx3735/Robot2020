@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
-import frc.robot.commands.NormalDrive;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -37,6 +36,16 @@ public class DriveTrain extends SubsystemBase {
       l1.set(ControlMode.PercentOutput, left);
       r1.set(ControlMode.PercentOutput, right);
 
+  }
+
+  public void normalDrive(double move, double turn){
+    // Robot.drive.r1.setOpenLoopRampRate(RobotMap.Constants.rampRate);
+    // Robot.drive.l1.setOpenLoopRampRate(RobotMap.Constants.rampRate);
+    // if (move == 0) {
+    //   Robot.drive.r1.setOpenLoopRampRate(0);
+    //   Robot.drive.l1.setOpenLoopRampRate(0);
+    // }
+    setLeftRight(move + turn, move - turn);
   }
 
   @Override

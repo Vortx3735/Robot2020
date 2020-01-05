@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.NormalDrive;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.util.VorTXController;
@@ -21,16 +21,13 @@ import frc.robot.util.VorTXMath;
 
 public class RobotContainer {
 
-  //Subsystems
+  // Subsystems
   private final DriveTrain drive = new DriveTrain();
   private final ColorSensor color = new ColorSensor();
 
+  // Commands
 
-  //Commands
-  private final NormalDrive normalDrive = new NormalDrive(drive);
-
-
-  //Controllers
+  // Controllers
   private static final VorTXController main = new VorTXController(0);
   private static final VorTXController co = new VorTXController(1);
 
@@ -38,17 +35,17 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    drive.setDefaultCommand(normalDrive);
+    drive.setDefaultCommand(new RunCommand(() -> drive.normalDrive(getDriveValue(), getTurnValue()), drive));
     configureButtonBindings();
   }
 
-  public static double getDriveValue() {
+  public double getDriveValue() {
     return -Math.copySign(
         Math.pow(VorTXMath.applyDeadband(main.getTriggerAxis(Hand.kRight) - main.getTriggerAxis(Hand.kLeft), .2), 2),
         VorTXMath.applyDeadband(main.getTriggerAxis(Hand.kRight) - main.getTriggerAxis(Hand.kLeft), .2));
   }
 
-  public static double getTurnValue() {
+  public double getTurnValue() {
     double val = VorTXMath.applyDeadband(main.getX(Hand.kLeft), .1);
     return Math.copySign(val * val, val);
   }

@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.regex.MatchResult;
-
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -21,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ColorSensor extends SubsystemBase {
 
   ColorSensorV3 sensor;
-  I2C.Port i2cport = I2C.Port.kOnboard;
+
   ColorMatch match;
   Color detectedColor;
   ColorMatchResult matchResult;
@@ -30,22 +28,21 @@ public class ColorSensor extends SubsystemBase {
   private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
-  
+
   public ColorSensor() {
-    sensor = new ColorSensorV3(i2cport);
+    sensor = new ColorSensorV3(I2C.Port.kOnboard);
     match = new ColorMatch();
 
     match.addColorMatch(kBlueTarget);
     match.addColorMatch(kGreenTarget);
     match.addColorMatch(kRedTarget);
-    match.addColorMatch(kYellowTarget);   
+    match.addColorMatch(kYellowTarget);
   }
-  public void detectColor()
-  {
+
+  public void detectColor() {
     detectedColor = sensor.getColor();
-    
+
     matchResult = match.matchClosestColor(detectedColor);
- 
 
     if (matchResult.color == kBlueTarget) {
       colorString = "Blue";
@@ -57,8 +54,9 @@ public class ColorSensor extends SubsystemBase {
       colorString = "Yellow";
     } else {
       colorString = "Unknown";
+    }
   }
-}
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
