@@ -19,30 +19,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ColorSensor extends SubsystemBase {
 
   ColorSensorV3 sensor;
-
-  ColorMatch match;
+  ColorMatch matcher;
   Color detectedColor;
   ColorMatchResult matchResult;
+  
   public String colorString;
-  private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
-  private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-  private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
-  private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+  private final Color kBlueTarget = ColorMatch.makeColor(0 , 255, 255);
+  private final Color kGreenTarget = ColorMatch.makeColor(0, 255, 0);
+  private final Color kRedTarget = ColorMatch.makeColor(255, 0, 0);
+  private final Color kYellowTarget = ColorMatch.makeColor(255, 255, 0);
 
   public ColorSensor() {
     sensor = new ColorSensorV3(I2C.Port.kOnboard);
-    match = new ColorMatch();
+    matcher = new ColorMatch();
+    detectedColor = sensor.getColor();
 
-    match.addColorMatch(kBlueTarget);
-    match.addColorMatch(kGreenTarget);
-    match.addColorMatch(kRedTarget);
-    match.addColorMatch(kYellowTarget);
+    matcher.addColorMatch(kBlueTarget);
+    matcher.addColorMatch(kGreenTarget);
+    matcher.addColorMatch(kRedTarget);
+    matcher.addColorMatch(kYellowTarget);
   }
 
   public void detectColor() {
     detectedColor = sensor.getColor();
 
-    matchResult = match.matchClosestColor(detectedColor);
+    matchResult = matcher.matchClosestColor(detectedColor);
 
     if (matchResult.color == kBlueTarget) {
       colorString = "Blue";
@@ -60,6 +61,7 @@ public class ColorSensor extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    detectColor();
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
