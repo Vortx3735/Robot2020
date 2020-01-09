@@ -12,11 +12,15 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveStraight;
+import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.util.VorTXController;
@@ -30,7 +34,9 @@ public class RobotContainer {
   private final AHRS navx = new AHRS();
 
   // Commands
-  private final DriveStraight drivestraight = new DriveStraight(drive, navx , 30);
+  private final DriveStraight drivestraight = new DriveStraight(drive, navx, 245);
+  private final TurnToAngle turnto45 = new TurnToAngle(drive,navx, 45);
+  private final TurnToAngle turnto135 = new TurnToAngle(drive,navx, 70);
 
   // Controllers
   private static final VorTXController main = new VorTXController(0);
@@ -44,15 +50,15 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  public  double getDriveValue() {
+  public double getDriveValue() {
     return Math.copySign(
         Math.pow(VorTXMath.applyDeadband(main.getTriggerAxis(Hand.kRight) - main.getTriggerAxis(Hand.kLeft), .1), 2),
         VorTXMath.applyDeadband(main.getTriggerAxis(Hand.kRight) - main.getTriggerAxis(Hand.kLeft), .1));
   }
 
-  public  double getTurnValue() {
+  public double getTurnValue() {
     double val = -VorTXMath.applyDeadband(main.getX(Hand.kLeft), .1);
-    return .5*Math.copySign(val * val, val);
+    return Math.copySign(val * val, val);
   }
 
   /**
@@ -62,7 +68,9 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // main.a.whenPressed(drivestraight);
+    // main.y.whenPressed(new SequentialCommandGroup(turnto45,drivestraight, turnto135));
+    main.a.whenPressed(turnto45);
+    main.x.whenPressed(drivestraight);
 
   }
 
@@ -74,5 +82,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return null;
+  }
+
+  public void log(){
+    SmartDashboard.putNumber("Yaw Angle", navx.getYaw()); 
   }
 }

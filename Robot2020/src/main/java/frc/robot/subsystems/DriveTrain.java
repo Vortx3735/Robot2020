@@ -45,6 +45,9 @@ public class DriveTrain extends SubsystemBase {
     r1 = new CANSparkMax(RobotMap.Drive.r1, MotorType.kBrushless);
     r2 = new CANSparkMax(RobotMap.Drive.r2, MotorType.kBrushless);
 
+    leftEnc = l1.getEncoder();
+    rightEnc = r1.getEncoder();
+
     r1.restoreFactoryDefaults();
     r2.restoreFactoryDefaults();
     l1.restoreFactoryDefaults();
@@ -55,11 +58,22 @@ public class DriveTrain extends SubsystemBase {
 
     l1.setInverted(true);
 
+    r1.setSmartCurrentLimit(30);
+    r2.setSmartCurrentLimit(30);
+    l1.setSmartCurrentLimit(30);
+    l2.setSmartCurrentLimit(30);
+
+
     r1.setIdleMode(IdleMode.kBrake);
     l1.setIdleMode(IdleMode.kBrake);
     r2.setIdleMode(IdleMode.kBrake);
     l2.setIdleMode(IdleMode.kBrake);
 
+  }
+
+  public void zeroEncoders(){
+    leftEnc.setPosition(0);
+    rightEnc.setPosition(0);
   }
 
   public void setLeftRight(double left, double right) {
@@ -70,12 +84,12 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void normalDrive(double move, double turn) {
-    r1.setOpenLoopRampRate(2.5);
-    l1.setOpenLoopRampRate(2.5);
-    if (move < .35) {
-      r1.setOpenLoopRampRate(0);
-      l1.setOpenLoopRampRate(0);
-    }
+    // r1.setOpenLoopRampRate(3);
+    // l1.setOpenLoopRampRate(3);
+    // if (Math.abs(move) < .35 && Math.abs(turn)<.3) {
+    //   r1.setOpenLoopRampRate(0);
+    //   l1.setOpenLoopRampRate(0);
+    // }
     setLeftRight(move + turn, move - turn);
   }
 
@@ -86,10 +100,10 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("Right Speed", r1.get());
-    // SmartDashboard.putNumber("Left Speed", l1.get());
+    SmartDashboard.putNumber("Right Speed", r1.get());
+    SmartDashboard.putNumber("Left Speed", l1.get());
 
-    // SmartDashboard.putNumber("Left Inches", leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
-    // SmartDashboard.putNumber("Right Inches", rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
+    SmartDashboard.putNumber("Left Inches", leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
+    SmartDashboard.putNumber("Right Inches", rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
   }
 }

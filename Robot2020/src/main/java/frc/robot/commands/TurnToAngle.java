@@ -27,9 +27,9 @@ public class TurnToAngle extends CommandBase {
     this.navx = navx;
     this.angle = angle;
 
-    pid = new PIDController(0,0,0);
+    pid = new PIDController(.7,0,.1);
     pid.setSetpoint(angle);
-
+    pid.setTolerance(2);
     addRequirements(drive);
   }
 
@@ -44,19 +44,22 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() {
     double val = pid.calculate(navx.getYaw(), angle);
-    drive.setLeftRight(val,-val);
-
+    drive.setLeftRight(-val,val);
+    System.out.println("aaa");
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("done lol");
+  
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+
     return pid.atSetpoint();
   }
 }
