@@ -8,6 +8,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANEncoder;
@@ -21,59 +24,55 @@ import frc.robot.RobotMap;
 
 public class DriveTrain extends SubsystemBase {
 
-  // WPI_TalonFX l1;
-  // WPI_TalonFX l2;
-  // WPI_TalonFX r1;
-  // WPI_TalonFX r2;
+  WPI_TalonFX l1;
+  WPI_TalonFX l2;
+  WPI_TalonFX r1;
+  WPI_TalonFX r2;
 
-  private CANSparkMax l1;
-  private CANSparkMax l2;
-  private CANSparkMax r1;
-  private CANSparkMax r2;
+  // private CANSparkMax l1;
+  // private CANSparkMax l2;
+  // private CANSparkMax r1;
+  // private CANSparkMax r2;
 
-  private CANEncoder leftEnc;
-  private CANEncoder rightEnc;
+  // private CANEncoder leftEnc;
+  // private CANEncoder rightEnc;
 
   public DriveTrain() {
-    // l1 = new WPI_TalonFX(RobotMap.Drive.l1);
-    // l2 = new WPI_TalonFX(RobotMap.Drive.l2);
-    // r1 = new WPI_TalonFX(RobotMap.Drive.r1);
-    // r2 = new WPI_TalonFX(RobotMap.Drive.r2);
+    l1 = new WPI_TalonFX(RobotMap.Drive.l1);
+    l2 = new WPI_TalonFX(RobotMap.Drive.l2);
+    r1 = new WPI_TalonFX(RobotMap.Drive.r1);
+    r2 = new WPI_TalonFX(RobotMap.Drive.r2);
 
-    l1 = new CANSparkMax(RobotMap.Drive.l1, MotorType.kBrushless);
-    l2 = new CANSparkMax(RobotMap.Drive.l2, MotorType.kBrushless);
-    r1 = new CANSparkMax(RobotMap.Drive.r1, MotorType.kBrushless);
-    r2 = new CANSparkMax(RobotMap.Drive.r2, MotorType.kBrushless);
+    // l1 = new CANSparkMax(RobotMap.Drive.l1, MotorType.kBrushless);
+    // l2 = new CANSparkMax(RobotMap.Drive.l2, MotorType.kBrushless);
+    // r1 = new CANSparkMax(RobotMap.Drive.r1, MotorType.kBrushless);
+    // r2 = new CANSparkMax(RobotMap.Drive.r2, MotorType.kBrushless);
 
-    leftEnc = l1.getEncoder();
-    rightEnc = r1.getEncoder();
+    // leftEnc = l1.getEncoder();
+    // rightEnc = r1.getEncoder();
 
-    r1.restoreFactoryDefaults();
-    r2.restoreFactoryDefaults();
-    l1.restoreFactoryDefaults();
-    l2.restoreFactoryDefaults();
+    // r1.restoreFactoryDefaults();
+    // r2.restoreFactoryDefaults();
+    // l1.restoreFactoryDefaults();
+    // l2.restoreFactoryDefaults();
+
+    r1.configFactoryDefault();
+    r2.configFactoryDefault();
+    l1.configFactoryDefault();
+    l2.configFactoryDefault();
 
     l2.follow(l1);
     r2.follow(r1);
 
-    l1.setInverted(true);
-
-    r1.setSmartCurrentLimit(30);
-    r2.setSmartCurrentLimit(30);
-    l1.setSmartCurrentLimit(30);
-    l2.setSmartCurrentLimit(30);
-
-
-    r1.setIdleMode(IdleMode.kBrake);
-    l1.setIdleMode(IdleMode.kBrake);
-    r2.setIdleMode(IdleMode.kBrake);
-    l2.setIdleMode(IdleMode.kBrake);
-
   }
 
-  public void zeroEncoders(){
-    leftEnc.setPosition(0);
-    rightEnc.setPosition(0);
+  public void zeroEncoders() {
+
+    l1.setSelectedSensorPosition(0);
+    r1.setSelectedSensorPosition(0);
+
+    // leftEnc.setPosition(0);
+    // rightEnc.setPosition(0);
   }
 
   public void setLeftRight(double left, double right) {
@@ -87,15 +86,48 @@ public class DriveTrain extends SubsystemBase {
     // r1.setOpenLoopRampRate(3);
     // l1.setOpenLoopRampRate(3);
     // if (Math.abs(move) < .35 && Math.abs(turn)<.3) {
-    //   r1.setOpenLoopRampRate(0);
-    //   l1.setOpenLoopRampRate(0);
+    // r1.setOpenLoopRampRate(0);
+    // l1.setOpenLoopRampRate(0);
     // }
     setLeftRight(move + turn, move - turn);
   }
 
   public double getAvgDistance() {
-    return (leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation
-        + rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation) / 2;
+    // return (leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation
+    //     + rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation) / 2;
+    return (l1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation
+        + r1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation) / 2;
+  }
+
+  public void init() {
+    l1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    l1.setSensorPhase(true);
+    l1.setSelectedSensorPosition(0);
+    l1.setNeutralMode(NeutralMode.Brake);
+
+    r1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    r1.setSensorPhase(true);
+    r1.setSelectedSensorPosition(0);
+    r1.setNeutralMode(NeutralMode.Brake);
+    
+
+    r1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
+    r2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
+    l1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
+    l2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
+
+
+    // l1.setInverted(true);
+
+    // r1.setSmartCurrentLimit(30);
+    // r2.setSmartCurrentLimit(30);
+    // l1.setSmartCurrentLimit(30);
+    // l2.setSmartCurrentLimit(30);
+
+    // r1.setIdleMode(IdleMode.kBrake);
+    // l1.setIdleMode(IdleMode.kBrake);
+    // r2.setIdleMode(IdleMode.kBrake);
+    // l2.setIdleMode(IdleMode.kBrake);
   }
 
   @Override
@@ -103,7 +135,10 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Right Speed", r1.get());
     SmartDashboard.putNumber("Left Speed", l1.get());
 
-    SmartDashboard.putNumber("Left Inches", leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
-    SmartDashboard.putNumber("Right Inches", rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
+    SmartDashboard.putNumber("Left Inches", l1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation);
+    SmartDashboard.putNumber("Right Inches", l2.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation);
+
+    // SmartDashboard.putNumber("Left Inches", leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
+    // SmartDashboard.putNumber("Right Inches", rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
   }
 }

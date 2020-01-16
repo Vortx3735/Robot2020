@@ -45,15 +45,12 @@ public class TurnToAngle extends CommandBase {
   public void execute() {
     double val = pid.calculate(navx.getYaw(), angle);
     drive.setLeftRight(-val,val);
-    System.out.println("aaa");
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    System.out.println("done lol");
-  
+  public void end(boolean interrupted) {  
   }
 
   // Returns true when the command should end.
