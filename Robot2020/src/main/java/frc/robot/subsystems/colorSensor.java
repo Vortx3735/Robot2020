@@ -24,10 +24,10 @@ public class ColorSensor extends SubsystemBase {
   ColorMatchResult matchResult;
   
   public String colorString;
-  private final Color kBlueTarget = ColorMatch.makeColor(0 , 255, 255);
-  private final Color kGreenTarget = ColorMatch.makeColor(0, 255, 0);
-  private final Color kRedTarget = ColorMatch.makeColor(255, 0, 0);
-  private final Color kYellowTarget = ColorMatch.makeColor(255, 255, 0);
+  private final Color kBlueTarget = ColorMatch.makeColor(0.0f, 0.0f, 1.0f);
+  private final Color kGreenTarget = ColorMatch.makeColor(0.0f, 0.5019608f, 0.0f);
+  private final Color kRedTarget = ColorMatch.makeColor(1, 0, 0);
+  private final Color kYellowTarget = ColorMatch.makeColor(0.98039216f, 0.98039216f, 0.8235294f);
 
   public ColorSensor() {
     sensor = new ColorSensorV3(I2C.Port.kOnboard);
@@ -56,16 +56,16 @@ public class ColorSensor extends SubsystemBase {
     } else {
       colorString = "Unknown";
     }
+    SmartDashboard.putNumber("Red", detectedColor.red*255);
+    SmartDashboard.putNumber("Green", detectedColor.green*255);
+    SmartDashboard.putNumber("Blue", detectedColor.blue*255);
+    SmartDashboard.putNumber("Confidence", matchResult.confidence);
+    SmartDashboard.putString("Detected Color", colorString);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     detectColor();
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("Confidence", matchResult.confidence);
-    SmartDashboard.putString("Detected Color", colorString);
   }
 }

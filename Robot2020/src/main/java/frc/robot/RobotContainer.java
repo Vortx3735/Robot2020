@@ -30,7 +30,7 @@ public class RobotContainer {
 
   // Subsystems
   private final DriveTrain drive = new DriveTrain();
-  // private final ColorSensor color = new ColorSensor();
+  private final ColorSensor color = new ColorSensor();
   private final AHRS navx = new AHRS();
 
   // Commands
