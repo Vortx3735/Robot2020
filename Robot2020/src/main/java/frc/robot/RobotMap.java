@@ -18,7 +18,7 @@ package frc.robot;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class RobotMap {
-    public final class Drive {
+    public static final class Drive {
         public static final int l1 = 15;
         public static final int l2 = 14;
         public static final int r1 = 2;
@@ -26,7 +26,11 @@ public final class RobotMap {
 
     }
 
-    public final class Constants {
+    public static final class Shooter {
+        public static final  int[] shooter = { 13, 12 };
+    }
+
+    public static final class Constants {
         public static final double inchesPerRotation = 3.8457;
     }
 }

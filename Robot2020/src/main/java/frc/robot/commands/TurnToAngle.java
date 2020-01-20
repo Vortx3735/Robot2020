@@ -44,7 +44,7 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() {
     double val = pid.calculate(navx.getYaw(), angle);
-    drive.setLeftRight(-val,val);
+    drive.setLeftRight(-val/2,val/2);
 
   }
 

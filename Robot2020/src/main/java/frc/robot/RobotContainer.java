@@ -23,6 +23,7 @@ import frc.robot.commands.DriveStraight;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Shooter;
 import frc.robot.util.VorTXController;
 import frc.robot.util.VorTXMath;
 
@@ -31,11 +32,12 @@ public class RobotContainer {
   // Subsystems
   private final DriveTrain drive = new DriveTrain();
   private final ColorSensor color = new ColorSensor();
+  private final Shooter shooter = new Shooter();
   private final AHRS navx = new AHRS();
 
   // Commands
-  private final DriveStraight drivestraight = new DriveStraight(drive, navx, 245);
-  private final TurnToAngle turnto45 = new TurnToAngle(drive,navx, 45);
+  private final DriveStraight drivestraight = new DriveStraight(drive, navx, 120);
+  private final TurnToAngle turnto90 = new TurnToAngle(drive,navx, 90);
   private final TurnToAngle turnto135 = new TurnToAngle(drive,navx, 70);
 
   // Controllers
@@ -47,8 +49,13 @@ public class RobotContainer {
    */
   public RobotContainer() {
     drive.setDefaultCommand(new RunCommand(() -> drive.normalDrive(getDriveValue(), getTurnValue()), drive));
+    shooter.setDefaultCommand(new RunCommand(() -> shooter.set(getShootValue()), shooter));
     configureButtonBindings();
   }
+
+  private double getShootValue() {
+    double val = -VorTXMath.applyDeadband(main.getY(Hand.kRight), .1);
+    return Math.copySign(val * val, val);  }
 
   public double getDriveValue() {
     return Math.copySign(
@@ -69,9 +76,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // main.y.whenPressed(new SequentialCommandGroup(turnto45,drivestraight, turnto135));
-    main.a.whenPressed(turnto45);
+    main.a.whenPressed(turnto90);
     main.x.whenPressed(drivestraight);
-
+    main.b.whenPressed(new InstantCommand(drive::reverseDir, drive));
   }
 
   /**
