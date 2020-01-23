@@ -88,10 +88,39 @@ public class DriveTrain extends SubsystemBase {
   public void normalDrive(double move, double turn) {
     move = VorTXMath.limit(move,-.5,.5);
     
-        if(l1.getInverted())
-    setLeftRight(move + turn, move - turn);
+    if(l1.getInverted())
+      setLeftRight(move + turn, move - turn);
     else
-    setLeftRight(move - turn, move + turn);
+      setLeftRight(move - turn, move + turn);
+  }
+
+  public void arcadeDrive(double move, double rotate){
+    double leftSpeed;
+    double rightSpeed;
+
+    double maxInput = Math.copySign(Math.max(Math.abs(move), Math.abs(rotate)), move);
+
+    if(!l1.getInverted())
+      rotate = -rotate;
+      
+    if (move >= 0.0) {
+      if (rotate >= 0.0) {
+        leftSpeed = maxInput;
+        rightSpeed = move - rotate;
+      } else {
+        leftSpeed = move + rotate;
+        rightSpeed = maxInput;
+      }
+    } else {
+      if (rotate >= 0.0) {
+        leftSpeed = move + rotate;
+        rightSpeed = maxInput;
+      } else {
+        leftSpeed = maxInput;
+        rightSpeed = move - rotate;
+      }
+    }
+    setLeftRight(leftSpeed, rightSpeed);
   }
 
   public double getAvgDistance() {
