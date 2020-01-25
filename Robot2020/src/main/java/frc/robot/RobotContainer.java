@@ -20,9 +20,11 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveStraight;
+import frc.robot.commands.ShootAtSpeed;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.VorTXController;
 import frc.robot.util.VorTXMath;
@@ -34,11 +36,13 @@ public class RobotContainer {
   private final ColorSensor color = new ColorSensor();
   private final Shooter shooter = new Shooter();
   private final AHRS navx = new AHRS();
+  private final Intake intake = new Intake();
 
   // Commands
   private final DriveStraight drivestraight = new DriveStraight(drive, navx, 120);
   private final TurnToAngle turnto90 = new TurnToAngle(drive,navx, 90);
   private final TurnToAngle turnto135 = new TurnToAngle(drive,navx, 70);
+  private final ShootAtSpeed shoot3000 = new ShootAtSpeed(3000, shooter);
 
   // Controllers
   private static final VorTXController main = new VorTXController(0);
@@ -48,8 +52,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    drive.setDefaultCommand(new RunCommand(() -> drive.normalDrive(getDriveValue(), getTurnValue()), drive));
+    drive.setDefaultCommand(new RunCommand(() -> drive.normalDrive(1, getTurnValue()), drive));
     shooter.setDefaultCommand(new RunCommand(() -> shooter.set(getShootValue()), shooter));
+    // intake.setDefaultCommand(new RunCommand(()-> intake.set(getShootValue()), intake));
     configureButtonBindings();
   }
 
@@ -79,6 +84,7 @@ public class RobotContainer {
     main.a.whenPressed(turnto90);
     main.x.whenPressed(drivestraight);
     main.b.whenPressed(new InstantCommand(drive::reverseDir, drive));
+    main.y.whenPressed(shoot3000);
   }
 
   /**

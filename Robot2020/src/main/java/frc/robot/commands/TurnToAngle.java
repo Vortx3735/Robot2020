@@ -30,6 +30,7 @@ public class TurnToAngle extends CommandBase {
     pid = new PIDController(.7,0,.1);
     pid.setSetpoint(angle);
     pid.setTolerance(2);
+    pid.enableContinuousInput(-180, 180);
     addRequirements(drive);
   }
 
@@ -44,7 +45,7 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() {
     double val = pid.calculate(navx.getYaw(), angle);
-    drive.setLeftRight(-val/2,val/2);
+    drive.setLeftRight(-val,val);
 
   }
 

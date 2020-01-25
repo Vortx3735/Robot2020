@@ -25,42 +25,42 @@ import frc.robot.util.VorTXMath;
 
 public class DriveTrain extends SubsystemBase {
 
-  // WPI_TalonFX l1;
-  // WPI_TalonFX l2;
-  // WPI_TalonFX r1;
-  // WPI_TalonFX r2;
+  WPI_TalonFX l1;
+  WPI_TalonFX l2;
+  WPI_TalonFX r1;
+  WPI_TalonFX r2;
 
-  private CANSparkMax l1;
-  private CANSparkMax l2;
-  private CANSparkMax r1;
-  private CANSparkMax r2;
+  // private CANSparkMax l1;
+  // private CANSparkMax l2;
+  // private CANSparkMax r1;
+  // private CANSparkMax r2;
 
-  private CANEncoder leftEnc;
-  private CANEncoder rightEnc;
+  // private CANEncoder leftEnc;
+  // private CANEncoder rightEnc;
 
   public DriveTrain() {
-    // l1 = new WPI_TalonFX(RobotMap.Drive.l1);
-    // l2 = new WPI_TalonFX(RobotMap.Drive.l2);
-    // r1 = new WPI_TalonFX(RobotMap.Drive.r1);
-    // r2 = new WPI_TalonFX(RobotMap.Drive.r2);
+    l1 = new WPI_TalonFX(RobotMap.Drive.l1);
+    l2 = new WPI_TalonFX(RobotMap.Drive.l2);
+    r1 = new WPI_TalonFX(RobotMap.Drive.r1);
+    r2 = new WPI_TalonFX(RobotMap.Drive.r2);
 
-    l1 = new CANSparkMax(RobotMap.Drive.l1, MotorType.kBrushless);
-    l2 = new CANSparkMax(RobotMap.Drive.l2, MotorType.kBrushless);
-    r1 = new CANSparkMax(RobotMap.Drive.r1, MotorType.kBrushless);
-    r2 = new CANSparkMax(RobotMap.Drive.r2, MotorType.kBrushless);
+    // l1 = new CANSparkMax(RobotMap.Drive.l1, MotorType.kBrushless);
+    // l2 = new CANSparkMax(RobotMap.Drive.l2, MotorType.kBrushless);
+    // r1 = new CANSparkMax(RobotMap.Drive.r1, MotorType.kBrushless);
+    // r2 = new CANSparkMax(RobotMap.Drive.r2, MotorType.kBrushless);
 
-    leftEnc = l1.getEncoder();
-    rightEnc = r1.getEncoder();
+    // leftEnc = l1.getEncoder();
+    // rightEnc = r1.getEncoder();
 
-    r1.restoreFactoryDefaults();
-    r2.restoreFactoryDefaults();
-    l1.restoreFactoryDefaults();
-    l2.restoreFactoryDefaults();
+    // r1.restoreFactoryDefaults();
+    // r2.restoreFactoryDefaults();
+    // l1.restoreFactoryDefaults();
+    // l2.restoreFactoryDefaults();
 
-    // r1.configFactoryDefault();
-    // r2.configFactoryDefault();
-    // l1.configFactoryDefault();
-    // l2.configFactoryDefault();
+    r1.configFactoryDefault();
+    r2.configFactoryDefault();
+    l1.configFactoryDefault();
+    l2.configFactoryDefault();
 
     l2.follow(l1);
     r2.follow(r1);
@@ -71,11 +71,11 @@ public class DriveTrain extends SubsystemBase {
 
   public void zeroEncoders() {
 
-    // l1.setSelectedSensorPosition(0);
-    // r1.setSelectedSensorPosition(0);
+    l1.setSelectedSensorPosition(0);
+    r1.setSelectedSensorPosition(0);
 
-    leftEnc.setPosition(0);
-    rightEnc.setPosition(0);
+    // leftEnc.setPosition(0);
+    // rightEnc.setPosition(0);
   }
 
   public void setLeftRight(double left, double right) {
@@ -86,7 +86,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void normalDrive(double move, double turn) {
-    move = VorTXMath.limit(move,-.5,.5);
+    // move = VorTXMath.limit(move,-.5,.5);
     
     if(l1.getInverted())
       setLeftRight(move + turn, move - turn);
@@ -124,41 +124,41 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getAvgDistance() {
-    return (leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation
-        + rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation) / 2;
-    // return (l1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation
-    //     + r1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation) / 2;
+    // return (leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation
+    //     + rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation) / 2;
+    return (l1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation
+        + r1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation) / 2;
   }
 
   public void init() {
-    // l1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    // l1.setSensorPhase(true);
-    // l1.setSelectedSensorPosition(0);
-    // l1.setNeutralMode(NeutralMode.Brake);
+    l1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    l1.setSensorPhase(true);
+    l1.setSelectedSensorPosition(0);
+    l1.setNeutralMode(NeutralMode.Brake);
 
-    // r1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    // r1.setSensorPhase(true);
-    // r1.setSelectedSensorPosition(0);
-    // r1.setNeutralMode(NeutralMode.Brake);
+    r1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    r1.setSensorPhase(true);
+    r1.setSelectedSensorPosition(0);
+    r1.setNeutralMode(NeutralMode.Brake);
     
 
-    // r1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
-    // r2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
-    // l1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
-    // l2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
+    r1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
+    r2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
+    l1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
+    l2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
 
 
-    l1.setInverted(true);
+    // l1.setInverted(true);
 
-    r1.setSmartCurrentLimit(25);
-    r2.setSmartCurrentLimit(25);
-    l1.setSmartCurrentLimit(25);
-    l2.setSmartCurrentLimit(25);
+    // r1.setSmartCurrentLimit(25);
+    // r2.setSmartCurrentLimit(25);
+    // l1.setSmartCurrentLimit(25);
+    // l2.setSmartCurrentLimit(25);
 
-    r1.setIdleMode(IdleMode.kBrake);
-    l1.setIdleMode(IdleMode.kBrake);
-    r2.setIdleMode(IdleMode.kBrake);
-    l2.setIdleMode(IdleMode.kBrake);
+    // r1.setIdleMode(IdleMode.kBrake);
+    // l1.setIdleMode(IdleMode.kBrake);
+    // r2.setIdleMode(IdleMode.kBrake);
+    // l2.setIdleMode(IdleMode.kBrake);
   }
 
   public void reverseDir(){
@@ -170,10 +170,10 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Right Speed", r1.get());
     SmartDashboard.putNumber("Left Speed", l1.get());
 
-    // SmartDashboard.putNumber("Left Inches", l1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation);
-    // SmartDashboard.putNumber("Right Inches", l2.getSelectedSensorPosition() * RobotMap.Constants.inchesPerRotation);
+    SmartDashboard.putNumber("Left Velocity", l1.getSelectedSensorVelocity()/2048);
+    SmartDashboard.putNumber("Right Velocity", r1.getSelectedSensorVelocity()/2048);
 
-    SmartDashboard.putNumber("Left Inches", leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
-    SmartDashboard.putNumber("Right Inches", rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
+    // SmartDashboard.putNumber("Left Inches", leftEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
+    // SmartDashboard.putNumber("Right Inches", rightEnc.getPosition() * RobotMap.Constants.inchesPerRotation);
   }
 }

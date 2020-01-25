@@ -21,13 +21,15 @@ public final class RobotMap {
     public static final class Drive {
         public static final int l1 = 15;
         public static final int l2 = 14;
-        public static final int r1 = 2;
-        public static final int r2 = 3;
+        public static final int r1 = 12;
+        public static final int r2 = 13;
 
     }
 
     public static final class Shooter {
-        public static final  int[] shooter = { 13, 12 };
+        public static final  int shooter1 = 2;
+        public static final  int shooter2 = 3;
+
     }
 
     public static final class Constants {
