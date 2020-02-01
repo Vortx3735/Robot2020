@@ -7,24 +7,31 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotMap;
+import frc.robot.util.VorTXMath;
+import frc.robot.util.VorTXTalonSRX;
 
-public class Intake extends SubsystemBase {
-  WPI_TalonSRX intake;
+public class Turret extends SubsystemBase {
 
-  public Intake() {
-    intake = new WPI_TalonSRX(0);
+  VorTXTalonSRX turret;
 
+  public Turret() {
+    turret = new VorTXTalonSRX(RobotMap.Turret.motor);
+    turret.initSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, false);
+    turret.setNeutralMode(NeutralMode.Brake);
   }
 
   public void set(double speed) {
-    intake.set(speed);
+    turret.set(VorTXMath.limit(speed, -.5, .5));
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Turret Angle", turret.getPosition());
   }
 }

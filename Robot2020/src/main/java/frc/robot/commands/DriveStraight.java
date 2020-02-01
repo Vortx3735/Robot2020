@@ -11,7 +11,6 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.util.VorTXMath;
@@ -27,12 +26,12 @@ public class DriveStraight extends CommandBase {
 
   private double targetAngle;
   private double targetDist;
-  
+
   public DriveStraight(DriveTrain drive, AHRS navx, double targetDist) {
     dispid = new PIDController(.01, 0, 0.002);
-    dispid.setTolerance(2/RobotMap.Constants.inchesPerRotation);
+    dispid.setTolerance(2 / RobotMap.Constants.inchesPerTick);
 
-    angpid = new PIDController(.008,0,0);
+    angpid = new PIDController(.008, 0, 0);
     angpid.enableContinuousInput(-180f, 180f);
     angpid.setTolerance(1);
 
@@ -56,9 +55,9 @@ public class DriveStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double move = VorTXMath.limit(dispid.calculate(drive.getAvgDistance(), targetDist),-.5,.5);
-    double turn = VorTXMath.limit(angpid.calculate(navx.getYaw(), targetAngle),-.1,.1);
-    drive.normalDrive(move,-turn);
+    double move = VorTXMath.limit(dispid.calculate(drive.getAvgDistance(), targetDist), -.5, .5);
+    double turn = VorTXMath.limit(angpid.calculate(navx.getYaw(), targetAngle), -.1, .1);
+    drive.normalDrive(move, -turn);
   }
 
   // Called once the command ends or is interrupted.

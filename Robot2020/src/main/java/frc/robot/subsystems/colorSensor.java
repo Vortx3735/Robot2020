@@ -22,7 +22,7 @@ public class ColorSensor extends SubsystemBase {
   ColorMatch matcher;
   Color detectedColor;
   ColorMatchResult matchResult;
-  
+
   public String colorString;
   private final Color kBlueTarget = ColorMatch.makeColor(0.0f, 0.0f, 1.0f);
   private final Color kGreenTarget = ColorMatch.makeColor(0.0f, 0.5019608f, 0.0f);
@@ -56,9 +56,9 @@ public class ColorSensor extends SubsystemBase {
     } else {
       colorString = "Unknown";
     }
-    SmartDashboard.putNumber("Red", detectedColor.red*255);
-    SmartDashboard.putNumber("Green", detectedColor.green*255);
-    SmartDashboard.putNumber("Blue", detectedColor.blue*255);
+    SmartDashboard.putNumber("Red", detectedColor.red * 255);
+    SmartDashboard.putNumber("Green", detectedColor.green * 255);
+    SmartDashboard.putNumber("Blue", detectedColor.blue * 255);
     SmartDashboard.putNumber("Confidence", matchResult.confidence);
     SmartDashboard.putString("Detected Color", colorString);
   }

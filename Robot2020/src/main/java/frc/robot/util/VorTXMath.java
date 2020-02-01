@@ -10,7 +10,10 @@ package frc.robot.util;
  * Add your docs here.
  */
 public class VorTXMath {
-
+  
+  private static final double kInchesPerFoot = 12.0;
+  private static final double kMetersPerInch = 0.0254;
+  
   // Copied from WPI's RobotBase
   /**
    * Returns 0.0 if the given value is within the specified range around zero. The
@@ -49,4 +52,54 @@ public class VorTXMath {
     }
     return value;
   }
+   /**
+   * Converts given meters to feet.
+   *
+   * @param meters The meters to convert to feet.
+   * @return Feet converted from meters.
+   */
+  public static double metersToFeet(double meters) {
+    return metersToInches(meters) / kInchesPerFoot;
+  }
+
+  /**
+   * Converts given feet to meters.
+   *
+   * @param feet The feet to convert to meters.
+   * @return Meters converted from feet.
+   */
+  public static double feetToMeters(double feet) {
+    return inchesToMeters(feet * kInchesPerFoot);
+  }
+
+  /**
+   * Converts given meters to inches.
+   *
+   * @param meters The meters to convert to inches.
+   * @return Inches converted from meters.
+   */
+  public static double metersToInches(double meters) {
+    return meters / kMetersPerInch;
+  }
+
+  /**
+   * Converts given inches to meters.
+   *
+   * @param inches The inches to convert to meters.
+   * @return Meters converted from inches.
+   */
+  public static double inchesToMeters(double inches) {
+    return inches * kMetersPerInch;
+  }
+
+  /**
+   * Converts given degrees to radians.
+   *
+   * @param degrees The degrees to convert to radians.
+   * @return Radians converted from degrees.
+   */
+  public static double degreesToRadians(double degrees) {
+    return Math.toRadians(degrees);
+  }
+
 }

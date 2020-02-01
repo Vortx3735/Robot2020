@@ -7,21 +7,14 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
-import frc.robot.util.VorTXTalonSRX;
 
 public class Shooter extends SubsystemBase {
 
@@ -37,35 +30,31 @@ public class Shooter extends SubsystemBase {
 
     shooter1 = new CANSparkMax(RobotMap.Shooter.shooter1, MotorType.kBrushless);
     shooter2 = new CANSparkMax(RobotMap.Shooter.shooter2, MotorType.kBrushless);
-
+    shooter1.restoreFactoryDefaults();
+    shooter2.restoreFactoryDefaults();
     shooter2.setInverted(true);
-    shooter2.follow(shooter1);
 
     encoder1 = shooter1.getEncoder();
     encoder2 = shooter2.getEncoder();
-    init();
-
-  }
-
-  public void init() {
 
     shooter1.setIdleMode(IdleMode.kBrake);
     shooter2.setIdleMode(IdleMode.kBrake);
+
+    shooter2.follow(shooter1);
 
   }
 
   public void set(double speed) {
     shooter1.set(speed);
-    shooter2.set(speed);
   }
 
   public double getSpeed() {
+
     return .5 * (encoder1.getVelocity() + encoder2.getVelocity());
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter Speed", getSpeed());
-
   }
 }

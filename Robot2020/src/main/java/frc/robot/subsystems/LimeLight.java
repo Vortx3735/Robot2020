@@ -14,16 +14,14 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight extends SubsystemBase {
-  
 
     NetworkTable table;
-    NetworkTableEntry tx,ty, ta, ts,tl,tv,getpipe,camtran;
+    NetworkTableEntry tx, ty, ta, ts, tl, tv, getpipe, camtran;
 
-    // tv	Whether the limelight has any valid targets (0 or 1)
-    // tx	Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
-    // ty	Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
-    // ta	Target Area (0% of image to 100% of image)
-
+    // tv Whether the limelight has any valid targets (0 or 1)
+    // tx Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
+    // ty Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
+    // ta Target Area (0% of image to 100% of image)
 
     NetworkTableEntry ledMode, camMode, pipeline, stream, snapshot;
 
@@ -133,14 +131,14 @@ public class LimeLight extends SubsystemBase {
         snapshot.setNumber(Snapshot);
     }
 
-  @Override
-  public void periodic() {
-      //All these values can be found in network tables
-      SmartDashboard.putNumber("tx", getTx());
-      SmartDashboard.putNumber("ty", getTy());
-      SmartDashboard.putNumber("ta", getTa());
-      SmartDashboard.putNumber("tv" , getTv());
-      // SmartDashboard.putNumber("Distance", getDistance());  }
-    }  
+    @Override
+    public void periodic() {
+        // All these values can be found in network tables
+        SmartDashboard.putNumber("tx", getTx());
+        SmartDashboard.putNumber("ty", getTy());
+        SmartDashboard.putNumber("ta", getTa());
+        SmartDashboard.putNumber("tv", getTv());
+        // SmartDashboard.putNumber("Distance", getDistance()); }
+    }
 
 }

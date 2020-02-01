@@ -19,20 +19,23 @@ package frc.robot;
  */
 public final class RobotMap {
     public static final class Drive {
-        public static final int l1 = 15;
-        public static final int l2 = 14;
-        public static final int r1 = 12;
-        public static final int r2 = 13;
+        public static final int l1 = 14;
+        public static final int l2 = 15;
+        public static final int r1 = 0;
+        public static final int r2 = 1;
 
     }
 
+    public static final class Turret{
+        public static final int motor = 3;
+    }
     public static final class Shooter {
-        public static final  int shooter1 = 2;
-        public static final  int shooter2 = 3;
+        public static final  int shooter1 = 8;
+        public static final  int shooter2 = 9;
 
     }
 
     public static final class Constants {
-        public static final double inchesPerRotation = 3.8457;
+        public static final double inchesPerTick = 3.8457;
     }
 }

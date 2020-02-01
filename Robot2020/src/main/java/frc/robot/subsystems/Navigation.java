@@ -7,24 +7,29 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Intake extends SubsystemBase {
-  WPI_TalonSRX intake;
+public class Navigation extends SubsystemBase {
 
-  public Intake() {
-    intake = new WPI_TalonSRX(0);
+  private AHRS navx;
 
+  public Navigation() {
+    navx = new AHRS();
   }
 
-  public void set(double speed) {
-    intake.set(speed);
+  public double getYaw() {
+    return navx.getYaw();
+  }
+
+  public void zeroYaw() {
+    navx.zeroYaw();
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Yaw Angle", navx.getYaw());
   }
 }

@@ -88,10 +88,10 @@ public class VorTXTalonSRX extends WPI_TalonSRX {
         this.ticksPerInch = 1.0 / inches;
     }
 
-    public void initSensor(FeedbackDevice device, boolean reversed) {
+    public void initSensor(FeedbackDevice device, boolean phase) {
         this.configSelectedFeedbackSensor(device, 0, 0);
         this.setSelectedSensorPosition(0, 0, 0);
-        this.setSensorPhase(reversed);
+        this.setSensorPhase(phase);
         this.configNominalOutputForward(0, 0);
         this.configNominalOutputReverse(0, 0);
         this.configPeakOutputForward(1, 0);
