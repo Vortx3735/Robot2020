@@ -36,6 +36,6 @@ public final class RobotMap {
     }
 
     public static final class Constants {
-        public static final double inchesPerTick = 3.8457;
+        public static final double inchesPerTick = .00124724;
     }
 }

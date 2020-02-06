@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,8 +33,8 @@ public class DriveTrain extends SubsystemBase {
 
   DifferentialDriveOdometry odometry;
 
-  public DriveTrain() {
-    navx = new AHRS();
+  public DriveTrain(Navigation lol) {
+    navx = lol.getNavX();
     odometry = new DifferentialDriveOdometry(getGyroAngle());
 
     l1 = new WPI_TalonFX(RobotMap.Drive.l1);
@@ -54,6 +55,7 @@ public class DriveTrain extends SubsystemBase {
     // r1.setInverted(true);
 
     init();
+    
 
   }
 
@@ -63,10 +65,8 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void zeroEncoders() {
-
     l1.setSelectedSensorPosition(0);
     r1.setSelectedSensorPosition(0);
-
   }
 
   public void setLeftRight(double left, double right) {
@@ -112,9 +112,13 @@ public class DriveTrain extends SubsystemBase {
     setLeftRight(leftSpeed, rightSpeed);
   }
 
-  public double getAvgDistance() {
-    return (l1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerTick
-        + r1.getSelectedSensorPosition() * RobotMap.Constants.inchesPerTick) / 2;
+  public double getAvgDistance(Units unit) {
+   if (unit == Units.meters) {
+      return VorTXMath.inchesToMeters((l1.getSelectedSensorPosition()+r1.getSelectedSensorPosition())/2 * RobotMap.Constants.inchesPerTick);
+    } else {
+      return(l1.getSelectedSensorPosition()+r1.getSelectedSensorPosition())/2 * RobotMap.Constants.inchesPerTick;
+
+    }
   }
 
   public void init() {
@@ -159,15 +163,21 @@ public class DriveTrain extends SubsystemBase {
     }
   }
 
+  public void resetOdometry(){
+    navx.zeroYaw();
+    zeroEncoders();
+    odometry.resetPosition(new Pose2d(), new Rotation2d());
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Right Speed", r1.get());
     SmartDashboard.putNumber("Left Speed", l1.get());
-
-    // SmartDashboard.putNumber("Left Velocity", l1.getSelectedSensorVelocity() /
-    // 2048);
-    // SmartDashboard.putNumber("Right Velocity", r1.getSelectedSensorVelocity() /
-    // 2048);
+    SmartDashboard.putNumber("Avg Position Meters", getAvgDistance(Units.meters));
+    SmartDashboard.putNumber("Right Meters", getRightPosition(Units.meters));
+    SmartDashboard.putNumber("Left Meters", getLeftPosition(Units.meters));
+    SmartDashboard.putNumber("X-Translation", odometry.getPoseMeters().getTranslation().getX());
+    SmartDashboard.putNumber("Y-Translation", odometry.getPoseMeters().getTranslation().getY());
 
     odometry.update(getGyroAngle(), getLeftPosition(Units.meters), getRightPosition(Units.meters));
   }

@@ -25,6 +25,7 @@ import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Navigation;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.util.VorTXController;
@@ -33,7 +34,8 @@ import frc.robot.util.VorTXMath;
 public class RobotContainer {
 
   // Subsystems
-  private final DriveTrain drive = new DriveTrain();
+  private final Navigation navx = new Navigation(); 
+  private final DriveTrain drive = new DriveTrain(navx);
   // private final ColorSensor color = new ColorSensor();
   // private final Shooter shooter = new Shooter();
   // private final Intake intake = new Intake();
@@ -94,7 +96,10 @@ public class RobotContainer {
     // main.x.whenPressed(drivestraight);
     // main.b.whenPressed(new InstantCommand(drive::reverseDir, drive));
     // main.y.whenPressed(shoot3000);
-  }
+    main.a.whenPressed(new InstantCommand(drive::zeroEncoders));
+    main.b.whenPressed(new InstantCommand(navx::zeroYaw));
+    main.x.whenPressed(new InstantCommand(drive::resetOdometry));
+    }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

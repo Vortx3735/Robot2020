@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.util.Units;
 import frc.robot.util.VorTXMath;
 
 public class DriveStraight extends CommandBase {
@@ -55,7 +56,7 @@ public class DriveStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double move = VorTXMath.limit(dispid.calculate(drive.getAvgDistance(), targetDist), -.5, .5);
+    double move = VorTXMath.limit(dispid.calculate(drive.getAvgDistance(Units.feet)*12, targetDist), -.5, .5);
     double turn = VorTXMath.limit(angpid.calculate(navx.getYaw(), targetAngle), -.1, .1);
     drive.normalDrive(move, -turn);
   }

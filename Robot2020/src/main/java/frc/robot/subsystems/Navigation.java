@@ -20,6 +20,10 @@ public class Navigation extends SubsystemBase {
     navx = new AHRS();
   }
 
+  public AHRS getNavX(){
+    return navx;
+  }
+
   public double getYaw() {
     return navx.getYaw();
   }
