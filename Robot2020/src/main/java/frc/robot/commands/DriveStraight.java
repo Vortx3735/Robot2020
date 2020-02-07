@@ -56,7 +56,7 @@ public class DriveStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double move = VorTXMath.limit(dispid.calculate(drive.getAvgDistance(Units.feet)*12, targetDist), -.5, .5);
+    double move = VorTXMath.limit(dispid.calculate(drive.getAvgDistance(Units.inches), targetDist), -.5, .5);
     double turn = VorTXMath.limit(angpid.calculate(navx.getYaw(), targetAngle), -.1, .1);
     drive.normalDrive(move, -turn);
   }

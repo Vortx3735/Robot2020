@@ -11,5 +11,5 @@ package frc.robot.util;
  * Add your docs here.
  */
 public enum Units {
-    meters,feet;
+    meters,feet,inches;
 }
