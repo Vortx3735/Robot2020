@@ -19,12 +19,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.DriveStraight;
-import frc.robot.commands.ShootAtSpeed;
-import frc.robot.commands.TurnToAngle;
+import frc.robot.subsystems.Hood;
+import frc.robot.commands.drive.DriveStraight;
+import frc.robot.commands.shooter.ShootAtSpeed;
+import frc.robot.commands.drive.TurnToAngle;
+import frc.robot.commands.turret.TurretAutoAim;
+import frc.robot.commands.turret.TurretTurnToAngle;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Navigation;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -34,12 +38,14 @@ import frc.robot.util.VorTXMath;
 public class RobotContainer {
 
   // Subsystems
-  private final Navigation navx = new Navigation(); 
-  private final DriveTrain drive = new DriveTrain(navx);
+  // private final Navigation navx = new Navigation();
+  // private final DriveTrain drive = new DriveTrain(navx);
   // private final ColorSensor color = new ColorSensor();
   // private final Shooter shooter = new Shooter();
   // private final Intake intake = new Intake();
+  private final LimeLight limelight = new LimeLight();
   // private final Turret turret = new Turret();
+  private final Hood hood = new Hood();
 
   // Commands
   // private final DriveStraight drivestraight = new DriveStraight(drive, navx,
@@ -47,7 +53,8 @@ public class RobotContainer {
   // private final TurnToAngle turnto90 = new TurnToAngle(drive,navx, 90);
   // private final TurnToAngle turnto135 = new TurnToAngle(drive,navx, 70);
   // private final ShootAtSpeed shoot3000 = new ShootAtSpeed(3000, shooter);
-
+  // private final TurretTurnToAngle turnTo90 = new TurretTurnToAngle(turret, 90);
+  // private final TurretAutoAim autoaim = new TurretAutoAim(turret, limelight);
   // Controllers
   private static final VorTXController main = new VorTXController(0);
   // private static final VorTXController co = new VorTXController(1);
@@ -56,13 +63,16 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    drive.setDefaultCommand(new RunCommand(() -> drive.normalDrive(getDriveValue(), getTurnValue()), drive));
+    // drive.setDefaultCommand(new RunCommand(() -> drive.arcadeDrive(getDriveValue(), getTurnValue()), drive));
     // shooter.setDefaultCommand(new RunCommand(() -> shooter.set(getShootValue()),
     // shooter));
     // intake.setDefaultCommand(new RunCommand(()-> intake.set(getShootValue()),
     // intake));
-    // turret.setDefaultCommand(new RunCommand(() -> turret.set(getTurnValue()),
-    // turret));
+    // turret.setDefaultCommand(new RunCommand(() -> turret.set(getTurretValue()), turret));
+    // turret.setDefaultCommand(autoaim);
+
+    hood.setDefaultCommand(new RunCommand(() -> hood.set(getHoodValue()),hood));
+
     configureButtonBindings();
   }
 
@@ -74,12 +84,22 @@ public class RobotContainer {
 
   public double getDriveValue() {
     return Math.copySign(
-        Math.pow(VorTXMath.applyDeadband(main.getTriggerAxis(Hand.kRight) - main.getTriggerAxis(Hand.kLeft), .1), 2),
-        VorTXMath.applyDeadband(main.getTriggerAxis(Hand.kRight) - main.getTriggerAxis(Hand.kLeft), .1));
+        Math.pow(VorTXMath.applyDeadband(main.getTriggerAxis(Hand.kRight) - main.getTriggerAxis(Hand.kLeft), .05), 2),
+        VorTXMath.applyDeadband(main.getTriggerAxis(Hand.kRight) - main.getTriggerAxis(Hand.kLeft), .05));
   }
 
   public double getTurnValue() {
-    double val = -VorTXMath.applyDeadband(main.getX(Hand.kLeft), .1);
+    double val = -VorTXMath.applyDeadband(main.getX(Hand.kLeft), .01);
+    return Math.copySign(val * val, val);
+  }
+
+  public double getTurretValue() {
+    double val = -VorTXMath.applyDeadband(main.getX(Hand.kRight), .05);
+    return Math.copySign(val * val, val);
+  }
+
+  public double getHoodValue() {
+    double val = -VorTXMath.limit(VorTXMath.applyDeadband(main.getY(Hand.kLeft), .05),-.4,.4);
     return Math.copySign(val * val, val);
   }
 
@@ -92,14 +112,15 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // // main.y.whenPressed(new SequentialCommandGroup(turnto45,drivestraight,
     // turnto135));
-    // main.a.whenPressed(turnto90);
     // main.x.whenPressed(drivestraight);
     // main.b.whenPressed(new InstantCommand(drive::reverseDir, drive));
     // main.y.whenPressed(shoot3000);
-    main.a.whenPressed(new InstantCommand(drive::zeroEncoders));
-    main.b.whenPressed(new InstantCommand(navx::zeroYaw));
-    main.x.whenPressed(new InstantCommand(drive::resetOdometry));
-    }
+    // main.a.whenPressed(new InstantCommand(drive::zeroEncoders));
+    // main.b.whenPressed(new InstantCommand(navx::zeroYaw));
+    // main.x.whenPressed(new InstantCommand(turret::resetPosition));
+    // main.y.whenPressed(turnTo90);
+    // main.a.whileHeld(autoaim);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

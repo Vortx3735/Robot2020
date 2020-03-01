@@ -5,45 +5,40 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Navigation;
+import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.Turret;
 
-public class TurnToAngle extends CommandBase {
+public class TurretAutoAim extends CommandBase {
 
-  private Navigation nav;
-  private DriveTrain drive;
+  private Turret turret;
+  private LimeLight limelight;
   private PIDController pid;
-  private double angle;
 
-  public TurnToAngle(DriveTrain drive, Navigation nav, double angle) {
-    this.drive = drive;
-    this.nav = nav;
-    this.angle = angle;
 
-    pid = new PIDController(.7, 0, .1);
-    pid.setSetpoint(angle);
-    pid.setTolerance(2);
-    pid.enableContinuousInput(-180, 180);
-    addRequirements(drive);
+  public TurretAutoAim(Turret turret, LimeLight limelight) {
+    this.turret = turret;
+    this.limelight = limelight;
+
+    pid = new PIDController(.05, .04, 0);
+    addRequirements(this.turret);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    nav.zeroYaw();
     pid.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double val = pid.calculate(nav.getYaw(), angle);
-    drive.setLeftRight(-val, val);
-
+    double val = pid.calculate(limelight.getTx(), 0);
+    turret.set(val);
+    System.out.println(val);
   }
 
   // Called once the command ends or is interrupted.
@@ -54,7 +49,6 @@ public class TurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
     return pid.atSetpoint();
   }
 }

@@ -27,11 +27,22 @@ public class Turret extends SubsystemBase {
   }
 
   public void set(double speed) {
-    turret.set(VorTXMath.limit(speed, -.5, .5));
+    turret.set(speed);
+  }
+
+  public double getPosition() {
+    return turret.getPosition();
+  }
+  public void resetPosition(){
+    turret.resetPosition();
+  }
+  public double getAngle(){
+    return RobotMap.Turret.turretRotationsPerTick * getPosition() * 360;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Turret Angle", turret.getPosition());
+    SmartDashboard.putNumber("Turret Position", getPosition());
+    // SmartDashboard.putNumber("Turret Angle", getAngle());
   }
 }
