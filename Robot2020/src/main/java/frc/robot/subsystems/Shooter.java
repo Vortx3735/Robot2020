@@ -24,15 +24,25 @@ public class Shooter extends SubsystemBase {
   CANEncoder encoder1;
   CANEncoder encoder2;
 
+  CANSparkMax gate1;
+  CANSparkMax gate2;
+
   double setpoint;
 
   public Shooter() {
 
     shooter1 = new CANSparkMax(RobotMap.Shooter.shooter1, MotorType.kBrushless);
     shooter2 = new CANSparkMax(RobotMap.Shooter.shooter2, MotorType.kBrushless);
+    gate1 = new CANSparkMax(RobotMap.Shooter.gate1, MotorType.kBrushless);
+    gate2 = new CANSparkMax(RobotMap.Shooter.gate2, MotorType.kBrushless);
+
+    gate1.restoreFactoryDefaults();
+    gate2.restoreFactoryDefaults();
     shooter1.restoreFactoryDefaults();
     shooter2.restoreFactoryDefaults();
+
     shooter2.setInverted(true);
+    gate2.setInverted(true);
 
     encoder1 = shooter1.getEncoder();
     encoder2 = shooter2.getEncoder();
@@ -41,11 +51,16 @@ public class Shooter extends SubsystemBase {
     shooter2.setIdleMode(IdleMode.kBrake);
 
     shooter2.follow(shooter1);
+    gate2.follow(gate1);
 
   }
 
   public void set(double speed) {
     shooter1.set(speed);
+  }
+
+  public void setGate(double speed) {
+    gate1.set(speed);
   }
 
   public double getSpeed() {

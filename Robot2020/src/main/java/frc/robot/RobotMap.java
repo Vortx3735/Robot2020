@@ -26,18 +26,27 @@ public final class RobotMap {
 
     }
 
-    public static final class Turret{
+    public static final class Turret {
         public static final int motor = 0;
         public static final double turretRotationsPerTick = 4100;
     }
+
     public static final class Shooter {
-        public static final  int shooter1 = 8;
-        public static final  int shooter2 = 9;
+        public static final int shooter1 = 8;
+        public static final int shooter2 = 9;
+        public static final int gate1 = 2;
+        public static final int gate2 = 3;
 
     }
 
-    public static final class Hood{
+    public static final class Hood {
         public static final int hoodMotor = 14;
+
+    }
+
+    public static final class Intake {
+        public static final int pivot = 3;
+        public static final int rollers = 14;
     }
 
     public static final class Constants {

@@ -8,19 +8,29 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotMap;
+import frc.robot.util.VorTXTalonSRX;
 
 public class Intake extends SubsystemBase {
-  WPI_TalonSRX intake;
+  CANSparkMax rollers;
+  VorTXTalonSRX pivot;
 
   public Intake() {
-    intake = new WPI_TalonSRX(0);
+    rollers = new CANSparkMax(RobotMap.Intake.rollers, MotorType.kBrushless);
+    pivot = new VorTXTalonSRX(RobotMap.Intake.pivot);
 
   }
 
-  public void set(double speed) {
-    intake.set(speed);
+  public void setPivot(double speed) {
+    pivot.set(speed);
+  }
+
+  public void setRollers(double speed) {
+    rollers.set(speed);
   }
 
   @Override

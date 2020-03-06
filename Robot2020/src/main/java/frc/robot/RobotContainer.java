@@ -38,13 +38,13 @@ import frc.robot.util.VorTXMath;
 public class RobotContainer {
 
   // Subsystems
-  // private final Navigation navx = new Navigation();
-  // private final DriveTrain drive = new DriveTrain(navx);
-  // private final ColorSensor color = new ColorSensor();
-  // private final Shooter shooter = new Shooter();
-  // private final Intake intake = new Intake();
+  private final Navigation navx = new Navigation();
+  private final DriveTrain drive = new DriveTrain(navx);
+  private final ColorSensor color = new ColorSensor();
+  private final Shooter shooter = new Shooter();
+  private final Intake intake = new Intake();
   private final LimeLight limelight = new LimeLight();
-  // private final Turret turret = new Turret();
+  private final Turret turret = new Turret();
   private final Hood hood = new Hood();
 
   // Commands
@@ -57,23 +57,32 @@ public class RobotContainer {
   // private final TurretAutoAim autoaim = new TurretAutoAim(turret, limelight);
   // Controllers
   private static final VorTXController main = new VorTXController(0);
-  // private static final VorTXController co = new VorTXController(1);
+  private static final VorTXController co = new VorTXController(1);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // drive.setDefaultCommand(new RunCommand(() -> drive.arcadeDrive(getDriveValue(), getTurnValue()), drive));
-    // shooter.setDefaultCommand(new RunCommand(() -> shooter.set(getShootValue()),
-    // shooter));
-    // intake.setDefaultCommand(new RunCommand(()-> intake.set(getShootValue()),
+    drive.setDefaultCommand(new RunCommand(() -> drive.arcadeDrive(getDriveValue(), getTurnValue()), drive));
+    shooter.setDefaultCommand(new RunCommand(() -> shooter.set(getShootValue()), shooter));
+    // intake.setDefaultCommand(new RunCommand(() -> intake.set(getShootValue()),
     // intake));
-    // turret.setDefaultCommand(new RunCommand(() -> turret.set(getTurretValue()), turret));
+    turret.setDefaultCommand(new RunCommand(() -> turret.set(getTurretValue()), turret));
     // turret.setDefaultCommand(autoaim);
 
-    hood.setDefaultCommand(new RunCommand(() -> hood.set(getHoodValue()),hood));
+    hood.setDefaultCommand(new RunCommand(() -> hood.set(getHoodValue()), hood));
 
     configureButtonBindings();
+  }
+
+  /**
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureButtonBindings() {
+  
   }
 
   private double getShootValue() {
@@ -99,27 +108,8 @@ public class RobotContainer {
   }
 
   public double getHoodValue() {
-    double val = -VorTXMath.limit(VorTXMath.applyDeadband(main.getY(Hand.kLeft), .05),-.4,.4);
+    double val = -VorTXMath.limit(VorTXMath.applyDeadband(main.getY(Hand.kLeft), .05), -.4, .4);
     return Math.copySign(val * val, val);
-  }
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-    // // main.y.whenPressed(new SequentialCommandGroup(turnto45,drivestraight,
-    // turnto135));
-    // main.x.whenPressed(drivestraight);
-    // main.b.whenPressed(new InstantCommand(drive::reverseDir, drive));
-    // main.y.whenPressed(shoot3000);
-    // main.a.whenPressed(new InstantCommand(drive::zeroEncoders));
-    // main.b.whenPressed(new InstantCommand(navx::zeroYaw));
-    // main.x.whenPressed(new InstantCommand(turret::resetPosition));
-    // main.y.whenPressed(turnTo90);
-    // main.a.whileHeld(autoaim);
   }
 
   /**
