@@ -7,24 +7,13 @@
 
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Hood;
-import frc.robot.commands.drive.DriveStraight;
-import frc.robot.commands.shooter.ShootAtSpeed;
-import frc.robot.commands.drive.TurnToAngle;
 import frc.robot.commands.turret.TurretAutoAim;
-import frc.robot.commands.turret.TurretTurnToAngle;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -48,13 +37,8 @@ public class RobotContainer {
   private final Hood hood = new Hood();
 
   // Commands
-  // private final DriveStraight drivestraight = new DriveStraight(drive, navx,
-  // 120);
-  // private final TurnToAngle turnto90 = new TurnToAngle(drive,navx, 90);
-  // private final TurnToAngle turnto135 = new TurnToAngle(drive,navx, 70);
-  // private final ShootAtSpeed shoot3000 = new ShootAtSpeed(3000, shooter);
-  // private final TurretTurnToAngle turnTo90 = new TurretTurnToAngle(turret, 90);
-  // private final TurretAutoAim autoaim = new TurretAutoAim(turret, limelight);
+  private final TurretAutoAim autoaim = new TurretAutoAim(turret, limelight);
+
   // Controllers
   private static final VorTXController main = new VorTXController(0);
   private static final VorTXController co = new VorTXController(1);
@@ -64,13 +48,18 @@ public class RobotContainer {
    */
   public RobotContainer() {
     drive.setDefaultCommand(new RunCommand(() -> drive.arcadeDrive(getDriveValue(), getTurnValue()), drive));
-    shooter.setDefaultCommand(new RunCommand(() -> shooter.set(getShootValue()), shooter));
-    // intake.setDefaultCommand(new RunCommand(() -> intake.set(getShootValue()),
-    // intake));
+    // hood.setDefaultCommand(new RunCommand(() -> hood.set(getHoodValue()), hood));
+    // shooter.setDefaultCommand(new RunCommand(() -> {
+    //   if (shooter.getShooting()) {
+    //     shooter.setGate(1);
+    //     shooter.set(1);
+    //   } else {
+    //     shooter.setGate(0);
+    //     shooter.set(0);
+    //   }
+    // }, shooter));
+    intake.setDefaultCommand(new RunCommand(() -> intake.suckBalls(getHoodValue(), 0), intake));
     turret.setDefaultCommand(new RunCommand(() -> turret.set(getTurretValue()), turret));
-    // turret.setDefaultCommand(autoaim);
-
-    hood.setDefaultCommand(new RunCommand(() -> hood.set(getHoodValue()), hood));
 
     configureButtonBindings();
   }
@@ -82,13 +71,12 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-  
-  }
+    main.b.whenPressed(drive::reverseDir);
+    main.x.whenPressed(shooter::toggleShooting);
 
-  private double getShootValue() {
-    double val = -VorTXMath.applyDeadband(main.getY(Hand.kRight), .1);
+    co.rb.whileHeld(autoaim);
+    co.lb.whenPressed(shooter::toggleShooting);
 
-    return Math.copySign(val * val, val);
   }
 
   public double getDriveValue() {
@@ -103,12 +91,18 @@ public class RobotContainer {
   }
 
   public double getTurretValue() {
-    double val = -VorTXMath.applyDeadband(main.getX(Hand.kRight), .05);
+    double val = VorTXMath.applyDeadband(co.getTriggerAxis(Hand.kRight) - co.getTriggerAxis(Hand.kLeft), .05);
     return Math.copySign(val * val, val);
   }
 
+
   public double getHoodValue() {
-    double val = -VorTXMath.limit(VorTXMath.applyDeadband(main.getY(Hand.kLeft), .05), -.4, .4);
+    double val = VorTXMath.limit(VorTXMath.applyDeadband(co.getY(Hand.kLeft), .05), -1, 1);
+    return Math.copySign(val * val, val);
+  }
+
+  public double getIntakeValue() {
+    double val = VorTXMath.applyDeadband(co.getY(Hand.kRight), .01);
     return Math.copySign(val * val, val);
   }
 

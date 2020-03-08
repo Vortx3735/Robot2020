@@ -142,7 +142,9 @@ public class DriveTrain extends SubsystemBase {
 
   public void reverseDir() {
     l1.setInverted(!l1.getInverted());
+    l2.setInverted(!l2.getInverted());
     r1.setInverted(!r1.getInverted());
+    r2.setInverted(!r2.getInverted());
   }
 
   public double getLeftPosition(Units unit) {

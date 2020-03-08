@@ -7,8 +7,6 @@
 
 package frc.robot.util;
 
-import javax.management.MXBean;
-
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -18,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  * Add your docs here.
  */
 public class VorTXTalonSRX extends WPI_TalonSRX {
-
+    
     private String name;
     private int timer = 0;
 
