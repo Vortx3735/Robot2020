@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,31 +7,45 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class LimeLight extends SubsystemBase {
+/**
+ * Add your docs here.
+ */
+public class Limelight extends SubsystemBase {
 
     NetworkTable table;
-    NetworkTableEntry tx, ty, ta, ts, tl, tv, getpipe, camtran;
+    NetworkTableEntry tx; 
+    NetworkTableEntry ty; 
+    NetworkTableEntry ta; 
+    NetworkTableEntry ts; 
+    NetworkTableEntry tl; 
+    NetworkTableEntry tv;
+    NetworkTableEntry getpipe;
+    NetworkTableEntry camtran;
+    
+    //setter dec
+    NetworkTableEntry ledMode;
+    NetworkTableEntry camMode;
+    NetworkTableEntry pipeline;
+    NetworkTableEntry stream;
+    NetworkTableEntry snapshot;
 
-    // tv Whether the limelight has any valid targets (0 or 1)
-    // tx Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
-    // ty Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
-    // ta Target Area (0% of image to 100% of image)
+    double txValue;
+    double taValue;
+    double distance;
+    String camtranValue;
 
-    NetworkTableEntry ledMode, camMode, pipeline, stream, snapshot;
+    double x,y,z,yaw;
 
-    double txValue, taValue, distance, camtranValue;
 
-    double x, y, z, yaw;
-
-    public LimeLight() {
-        table = NetworkTableInstance.getDefault().getTable("limelight");
-        tx = table.getEntry("tx");
+    public Limelight() {
+        table = NetworkTableInstance.getDefault().getTable("limelight");  
+        tx = table.getEntry("tx"); 
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
         ts = table.getEntry("ts");
@@ -45,11 +59,11 @@ public class LimeLight extends SubsystemBase {
         snapshot = table.getEntry("snapshot");
         camtran = table.getEntry("camtran");
 
-        // change these values when testing.
+        //change these values when testing.
         // mountAngle = 0;
         // mountHeight = 11;
         // targetHeight = 30;
-        //
+        // 
 
         setCamMode(0);
         setLedMode(0);
@@ -58,18 +72,17 @@ public class LimeLight extends SubsystemBase {
         setPipeline(1.0);
 
     }
-
-    // setters
+        // setters
     /**
      * @return the tx
      */
     public double getTx() {
-        if (tv.getDouble(0.0) == 1) {
+        if(tv.getDouble(0.0)==1) {
             txValue = tx.getDouble(txValue);
         } else {
             txValue = 0.0;
         }
-        return txValue;
+       return txValue;
     }
 
     /**
@@ -87,10 +100,10 @@ public class LimeLight extends SubsystemBase {
      * @return the ta
      */
     public double getTa() {
-        if (tv.getDouble(0.0) == 1) {
+        if(tv.getDouble(0.0)==1) {
             taValue = ta.getDouble(taValue);
         }
-        return taValue;
+       return taValue;
     }
 
     /**
@@ -116,7 +129,7 @@ public class LimeLight extends SubsystemBase {
     }
 
     public void setCamMode(double CamType) {
-        camMode.setNumber(CamType);
+       camMode.setNumber(CamType);
     }
 
     public void setPipeline(double Pipeline) {
@@ -132,13 +145,15 @@ public class LimeLight extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
-        // All these values can be found in network tables
-        SmartDashboard.putNumber("tx", getTx());
-        SmartDashboard.putNumber("ty", getTy());
-        SmartDashboard.putNumber("ta", getTa());
-        SmartDashboard.putNumber("tv", getTv());
-        // SmartDashboard.putNumber("Distance", getDistance()); }
+    public void periodic() {        
+        //All these values can be found in network tables
+         SmartDashboard.putNumber("tx", getTx());
+        // SmartDashboard.putNumber("ty", getTy());
+        // SmartDashboard.putNumber("ta", getTa());
+        // SmartDashboard.putNumber("tv" , getTv());
+        // SmartDashboard.putNumber("Distance", getDistance());
     }
+
+   
 
 }

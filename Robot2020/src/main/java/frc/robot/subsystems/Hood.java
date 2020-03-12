@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -26,9 +27,12 @@ public class Hood extends SubsystemBase {
   public Hood() {
     hood = new CANSparkMax(RobotMap.Hood.hoodMotor, MotorType.kBrushless);
     encoder = hood.getEncoder();
-    pid = new PIDController(0,0,0);
+    pid = new PIDController(.05,0,0);
     encoder.setPosition(0);
     pid.setTolerance(2);
+
+    hood.setIdleMode(IdleMode.kBrake);
+    encoder.setPosition(0);
   }
 
   public void set(double speed) {

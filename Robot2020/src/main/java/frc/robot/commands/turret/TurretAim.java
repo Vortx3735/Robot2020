@@ -9,22 +9,22 @@ package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 
-public class TurretAutoAim extends CommandBase {
-
+public class TurretAim extends CommandBase {
+ 
   private Turret turret;
-  private LimeLight limelight;
+  private Limelight limelight;
   private PIDController pid;
 
 
-  public TurretAutoAim(Turret turret, LimeLight limelight) {
+  public TurretAim(Turret turret, Limelight limelight) {
     this.turret = turret;
     this.limelight = limelight;
-
-    pid = new PIDController(.05, .04, 0);
-    addRequirements(this.turret);
+    
+    pid = new PIDController(.07, .04, 0);
+    addRequirements(this.turret,this.limelight);
   }
 
   // Called when the command is initially scheduled.
@@ -38,7 +38,7 @@ public class TurretAutoAim extends CommandBase {
   public void execute() {
     double val = pid.calculate(limelight.getTx(), 0);
     turret.set(val);
-    System.out.println(val);
+    System.out.println("lololol:"+ val);
   }
 
   // Called once the command ends or is interrupted.

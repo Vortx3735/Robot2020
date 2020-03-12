@@ -47,15 +47,18 @@ public class DriveTrain extends SubsystemBase {
     l1.configFactoryDefault();
     l2.configFactoryDefault();
 
-    l2.follow(l1);
     r2.follow(r1);
+    l2.follow(l1);
 
     r1.setInverted(true);
     r2.setInverted(true);
-    // r1.setInverted(true);
 
     init();
-    
+
+    r1.setNeutralMode(NeutralMode.Coast);
+    r2.setNeutralMode(NeutralMode.Coast);
+    l1.setNeutralMode(NeutralMode.Coast);
+    l2.setNeutralMode(NeutralMode.Coast);
 
   }
 
@@ -72,11 +75,10 @@ public class DriveTrain extends SubsystemBase {
   public void setLeftRight(double left, double right) {
     l1.set(left);
     r1.set(right);
+
   }
 
   public void normalDrive(double move, double turn) {
-    // move = VorTXMath.limit(move,-.5,.5);
-
     if (l1.getInverted())
       setLeftRight(move + turn, move - turn);
     else
@@ -113,10 +115,11 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getAvgDistance(Units unit) {
-   if (unit == Units.meters) {
-      return VorTXMath.inchesToMeters((l1.getSelectedSensorPosition()+r1.getSelectedSensorPosition())/2 * RobotMap.Constants.inchesPerTick);
+    if (unit == Units.meters) {
+      return VorTXMath.inchesToMeters(
+          (l1.getSelectedSensorPosition() + r1.getSelectedSensorPosition()) / 2 * RobotMap.Constants.inchesPerTick);
     } else {
-      return(l1.getSelectedSensorPosition()+r1.getSelectedSensorPosition())/2 * RobotMap.Constants.inchesPerTick;
+      return (l1.getSelectedSensorPosition() + r1.getSelectedSensorPosition()) / 2 * RobotMap.Constants.inchesPerTick;
 
     }
   }
@@ -133,8 +136,7 @@ public class DriveTrain extends SubsystemBase {
     r1.setNeutralMode(NeutralMode.Brake);
 
     r1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
-    // r2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0,
-    // 0));
+    r2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
     l1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
     l2.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 0, 0));
 
@@ -165,7 +167,7 @@ public class DriveTrain extends SubsystemBase {
     }
   }
 
-  public void resetOdometry(){
+  public void resetOdometry() {
     navx.zeroYaw();
     zeroEncoders();
     odometry.resetPosition(new Pose2d(), new Rotation2d());
@@ -173,14 +175,16 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Right Speed", r1.get());
-    SmartDashboard.putNumber("Left Speed", l1.get());
-    SmartDashboard.putNumber("Avg Position Meters", getAvgDistance(Units.meters));
-    SmartDashboard.putNumber("Right Meters", getRightPosition(Units.meters));
-    SmartDashboard.putNumber("Left Meters", getLeftPosition(Units.meters));
-    SmartDashboard.putNumber("X-Translation", odometry.getPoseMeters().getTranslation().getX());
-    SmartDashboard.putNumber("Y-Translation", odometry.getPoseMeters().getTranslation().getY());
+    SmartDashboard.putNumber("Avg Position Inches", getAvgDistance(Units.inches));
+    SmartDashboard.putNumber("Right Inches", getRightPosition(Units.inches));
+    SmartDashboard.putNumber("Left Inches", getLeftPosition(Units.inches));
 
+    // SmartDashboard.putNumber("X-Translation",
+    // odometry.getPoseMeters().getTranslation().getX());
+    // SmartDashboard.putNumber("Y-Translation",
+    // odometry.getPoseMeters().getTranslation().getY());
+    SmartDashboard.putNumber("Raw Drive Train Distance",
+        (r1.getSelectedSensorPosition() + r2.getSelectedSensorPosition()) / 2);
     odometry.update(getGyroAngle(), getLeftPosition(Units.meters), getRightPosition(Units.meters));
   }
 }

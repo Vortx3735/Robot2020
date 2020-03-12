@@ -30,7 +30,8 @@ public class DriveStraight extends CommandBase {
 
   public DriveStraight(DriveTrain drive, AHRS navx, double targetDist) {
     dispid = new PIDController(.01, 0, 0.002);
-    dispid.setTolerance(2 / RobotMap.Constants.inchesPerTick);
+    dispid.setTolerance(2);
+    dispid.setSetpoint(targetDist);
 
     angpid = new PIDController(.008, 0, 0);
     angpid.enableContinuousInput(-180f, 180f);
@@ -56,9 +57,10 @@ public class DriveStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double move = VorTXMath.limit(dispid.calculate(drive.getAvgDistance(Units.inches), targetDist), -.5, .5);
+    double move = VorTXMath.limit(dispid.calculate(drive.getAvgDistance(Units.inches), targetDist), -.25, .25);
     double turn = VorTXMath.limit(angpid.calculate(navx.getYaw(), targetAngle), -.1, .1);
-    drive.normalDrive(move, -turn);
+    drive.arcadeDrive(move, -turn);
+
   }
 
   // Called once the command ends or is interrupted.

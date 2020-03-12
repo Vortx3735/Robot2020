@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class VorTXController extends XboxController {
 	public JoystickButton a, b, x, y, lb, rb, back, start, ls, rs, lt, rt;
 
+	public JoystickPOVButton pov0,pov45,pov90,pov135, pov225, pov270, pov315, pov180;
+
 	public VorTXController(int port) {
 		super(port);
 
@@ -29,6 +31,16 @@ public class VorTXController extends XboxController {
 		start = new JoystickButton(this, 8);
 		ls = new JoystickButton(this, 9);
 		rs = new JoystickButton(this, 10);
+
+		
+		pov0 = new JoystickPOVButton(this, 0);
+		pov45 = new JoystickPOVButton(this, 45);
+		pov90 = new JoystickPOVButton(this, 90);
+		pov135 = new JoystickPOVButton(this, 135);
+		pov180 = new JoystickPOVButton(this, 180);
+		pov225 = new JoystickPOVButton(this, 225);
+		pov270 = new JoystickPOVButton(this, 270);
+		pov315 = new JoystickPOVButton(this, 315);
 	}
 
 }

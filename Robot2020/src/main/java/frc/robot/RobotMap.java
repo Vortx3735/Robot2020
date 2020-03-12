@@ -19,10 +19,10 @@ package frc.robot;
  */
 public final class RobotMap {
     public static final class Drive {
-        public static final int l1 = 14;
-        public static final int l2 = 15;
-        public static final int r1 = 0;
-        public static final int r2 = 1;
+        public static final int l1 = 0;
+        public static final int l2 = 1;
+        public static final int r1 = 14;
+        public static final int r2 = 15;
 
     }
 
@@ -32,7 +32,7 @@ public final class RobotMap {
     }
 
     public static final class Shooter {
-        //done
+        // done
         public static final int shooter1 = 12;
         public static final int shooter2 = 2;
         public static final int gate1 = 13;
@@ -41,15 +41,20 @@ public final class RobotMap {
     }
 
     public static final class Hood {
-        //done
+        // done
         public static final int hoodMotor = 11;
 
     }
 
     public static final class Intake {
         public static final int pivot = 9;
-        public static final int rollers = 5;
-        public static final int belt = 6;
+        public static final int rollers = 7;
+        public static final int belt = 4;
+    }
+
+    public static final class Climber {
+        public static final int releaser = 6;
+        public static final int winch = 5;
     }
 
     public static final class Constants {

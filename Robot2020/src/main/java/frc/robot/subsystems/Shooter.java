@@ -30,6 +30,7 @@ public class Shooter extends SubsystemBase {
   double setpoint;
 
   boolean isShooting = false;
+  boolean isReverse = false;
 
   public Shooter() {
 
@@ -48,8 +49,11 @@ public class Shooter extends SubsystemBase {
     shooter1.setIdleMode(IdleMode.kBrake);
     shooter2.setIdleMode(IdleMode.kBrake);
 
-
     gate2.setInverted(true);
+    gate1.setIdleMode(IdleMode.kBrake);
+    gate2.setIdleMode(IdleMode.kBrake);
+    shooter1.setIdleMode(IdleMode.kBrake);
+    shooter2.setIdleMode(IdleMode.kBrake);
   }
 
   public void toggleShooting() {
@@ -60,6 +64,14 @@ public class Shooter extends SubsystemBase {
     return isShooting;
   }
 
+  public void toggleReverse() {
+    isReverse = !isReverse;
+  }
+
+  public boolean getReverse() {
+    return isReverse;
+  }
+
   public void set(double speed) {
     shooter1.set(-speed);
     shooter2.set(speed);
@@ -68,6 +80,11 @@ public class Shooter extends SubsystemBase {
   public void setGate(double speed) {
     gate1.set(-speed);
     gate2.set(-speed);
+  }
+
+  public void setShooter(double shooter, double gate) {
+    set(shooter);
+    setGate(gate);
   }
 
   public double getSpeed() {

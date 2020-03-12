@@ -13,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
-import frc.robot.util.VorTXMath;
 import frc.robot.util.VorTXTalonSRX;
 
 public class Turret extends SubsystemBase {
@@ -42,7 +41,7 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Turret Position", getPosition());
+    SmartDashboard.putNumber("Turret Raw Position", getPosition());
     // SmartDashboard.putNumber("Turret Angle", getAngle());
   }
 }
