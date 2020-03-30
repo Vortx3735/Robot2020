@@ -19,6 +19,7 @@ public class VorTXTalonSRX extends WPI_TalonSRX {
     
     private String name;
     private int timer = 0;
+    
 
     // We update each synchronisly, so that we can only multiply, which is faster
     double ticksPerInch = 1;
